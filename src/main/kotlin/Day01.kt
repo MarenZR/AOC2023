@@ -1,7 +1,6 @@
 import java.io.File
 
 // Day 1: Trebuchet
-
 //Part one
 
 val data = readFileAsLinesUsingUseLines("src/day1.txt")
@@ -14,67 +13,22 @@ fun findCalibrationValue(numbers: List<String>): Int {
 // Part two
 
 val numbers = mapOf(
-    "one" to "1",
-    "two" to "2",
-    "three" to "3",
-    "four" to "4",
-    "five" to "5",
-    "six" to "6",
-    "seven" to "7",
-    "eight" to "8",
-    "nine" to "9",
+    "one" to "one1one",
+    "two" to "two2two",
+    "three" to "three3three",
+    "four" to "four4four",
+    "five" to "five5five",
+    "six" to "six6six",
+    "seven" to "seven7seven",
+    "eight" to "eight8eight",
+    "nine" to "nine9nine",
 )
 fun findFirstAndLastNumbers(list: List<String>): List<String> {
-    val reversed = list.map {
-        numbers.entries.reversed()
-            .fold(it) { acc, (key, value) -> acc.replace(key, value)}
-    }
-    val forwardList = list.map {
-        numbers.entries
-            .fold(it) { acc, (key, value) -> acc.replace(key, value)}
-    }
-
-    val lastNumbers: MutableList<String> = ArrayList()
-    reversed.forEachIndexed { index, s ->
-        lastNumbers.add(index, getLastNumberString(forwardList[index], s))
-    }
-
-    val firstNumbers: MutableList<String> = ArrayList()
-    reversed.forEachIndexed { index, s ->
-        firstNumbers.add(index, getFirstNumberString(forwardList[index], s))
-    }
-
-    val firsts = extractFirst(firstNumbers)
-    val lasts = extractLast(lastNumbers)
-
-    return firsts.zip(lasts) { a, b -> "$a$b"}
-}
-
-fun extractLast(numbers: List<String>): List<String> {
-    return numbers.map { it.last { char -> char.isDigit() }.toString() }
-}
-
-fun extractFirst(numbers: List<String>): List<String> {
-    return numbers.map { it.first { char -> char.isDigit() }.toString() }
-}
-
-fun getLastNumberString(first: String, second: String): String {
-    val indexFirst = first.indexOfLast { it.isDigit() }
-    val indexLast = second.indexOfLast { it.isDigit() }
-    if (indexFirst > indexLast) {
-        return first
-    } else {
-        return second
-    }
-}
-fun getFirstNumberString(first: String, second: String): String {
-    val indexFirst = first.indexOfFirst { it.isDigit() }
-    val indexLast = second.indexOfFirst { it.isDigit() }
-    if (indexFirst < indexLast) {
-        return first
-    } else {
-        return second
-    }
+    return list
+        .map { numbers.entries.fold(it) { acc, (key, value) ->
+            acc.replace(key, value) }
+        }
+        .map { it.filter { char -> char.isDigit() } }
 }
 
 fun main() {
