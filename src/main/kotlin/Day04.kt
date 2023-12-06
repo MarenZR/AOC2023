@@ -19,11 +19,9 @@ fun countWinningNumbers(parsedInput: List<String>): Int {
     var score = 0
     parsedInput.forEach { it ->
         val winningNumbers = it.trim().replace(", ,", "").replace(",", "").split(" ")
-        println(winningNumbers)
         var gameScore = 0
         if (winningNumbers.isNotEmpty()) {
             winningNumbers.forEach {
-                println(it + " so far sum is $score" + "gamescore: $gameScore")
                 val number = it.filter {  char -> char.isDigit() }
                 if (number.isNotEmpty()){
                     if (gameScore == 0) {
