@@ -13,12 +13,31 @@ fun String.isPossible(comparison: String): Boolean {
         val numberOfBalls = this.number().toInt()
         val comparisonNumber = comparison.number().toInt()
         if (numberOfBalls > comparisonNumber) {
-            //println("comparing $this: $numberOfBalls and $comparison: $comparisonNumber and saying false" )
-
             return false
         }
     }
     return true
+}
+
+fun List<String>.powerOfBalls(): Int {
+    var red = 0
+    var blue = 0
+    var green = 0
+    this.forEach { s ->
+        val balls = s.split(",")
+        balls.forEach {
+            if (it.color() == "red") {
+                if (it.number().toInt() > red) red = it.number().toInt()
+            }
+            if (it.color() == "blue") {
+                if (it.number().toInt() > blue) blue = it.number().toInt()
+            }
+            if (it.color() == "green") {
+                if (it.number().toInt() > green) green = it.number().toInt()
+            }
+        }
+    }
+    return red * blue * green
 }
 
 fun List<String>.hasPossibleGames(comparison: String): Boolean {
@@ -31,6 +50,14 @@ fun List<String>.hasPossibleGames(comparison: String): Boolean {
     return true
 }
 
+fun getSumOfPowers(map: Map<String, List<String>>): Long {
+    var sum: Long = 0
+    map.forEach { (_, u) ->
+        sum += u.powerOfBalls().toLong()
+    }
+    return sum
+}
+
 
 fun makeMap(list: List<String>) : MutableMap<String, List<String>> {
     // Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green
@@ -38,7 +65,7 @@ fun makeMap(list: List<String>) : MutableMap<String, List<String>> {
     // -->
     // [Game 1: [3 blue, 4 red,  1 red, 2 green,  6 blue; 2 green],
     // Game 2: [1 blue, 2 green,  3 green, 4 blue, 1 red,  1 green, 1 blue]]
-    var gameStats: MutableMap<String, List<String>> = mutableMapOf()
+    val gameStats: MutableMap<String, List<String>> = mutableMapOf()
     list.forEach {
         val game = it.split(":").first
         val stuff = it.split(":").last.split(";")
@@ -52,7 +79,6 @@ fun getPossibleGames(stats: MutableMap<String, List<String>>, red: String, green
     var possibleGames = 0
     stats.forEach { game ->
         if (game.value.hasPossibleGames(red) && game.value.hasPossibleGames(green) && game.value.hasPossibleGames(blue)) {
-            println("This is possible: $game " + game.value.size.toString() + " possible games so far: $possibleGames" )
             possibleGames += game.key.split(" ").last.toInt()
         }
     }
@@ -64,5 +90,7 @@ fun main() {
     println(getPossibleGames(testStats, "12 red", "13 green", "14 blue")) //should be 8
     val stats = makeMap(day2part1)
     println(getPossibleGames(stats, "12 red", "13 green", "14 blue")) //should be 2164
+    println(getSumOfPowers(testStats))
+    println(getSumOfPowers(stats))
 
 }
